@@ -1,0 +1,31 @@
+extends ../layouts/mobile
+
+block main
+  h1= title
+
+block content
+  - each excerpt in excerpts
+    .excerpt
+      h3
+        a(href='/excerpts/'+excerpt._id, title=excerpt.title) #{excerpt.title}
+      p= excerpt.body
+
+      .meta.muted
+        span= formatDate(excerpt.createdAt)
+        | &nbsp; - &nbsp;
+        span Submitter &nbsp;
+
+        - var name = excerpt.user.name ? excerpt.user.name : excerpt.user.username
+
+        a(href="/users/"+excerpt.user._id)= name
+        &nbsp; - &nbsp;
+        - if (excerpt.tags)
+          - each tag in excerpt.tags.split(',')
+            | &nbsp;
+            a.tag(href="/tags/"+tag)
+              i.icon-tags
+              |  #{tag}
+
+  - if (pages > 1)
+    ul.pagination
+      != createPagination(pages, page)

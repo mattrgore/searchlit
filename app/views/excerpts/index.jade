@@ -1,0 +1,16 @@
+extends ../layouts/default
+
+block main
+  h1= title
+
+block content
+  - if (excerpts.length)
+    - each excerpt in excerpts
+      include excerpt
+
+    - if (pages > 1)
+      ul.pagination
+        != createPagination(pages, page)
+  - else
+    h4.muted No excerpts.&nbsp;
+      a(href="/excerpts/new") create one

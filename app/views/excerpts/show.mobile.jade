@@ -1,0 +1,41 @@
+extends ../layouts/mobile
+
+
+block main
+  h1= excerpt.title
+
+block content
+  .row
+    .span9
+      p=excerpt.body
+      .meta.muted
+        - var name = excerpt.user.name ? excerpt.user.name : excerpt.user.username
+        p Author -&nbsp;
+          a(href="/users/"+excerpt.user._id)= name
+        p.muted= formatDate(excerpt.createdAt, "%b %d, %Y at %I:%M %p")
+        - if (excerpt.tags)
+          .tags
+            - each tag in excerpt.tags.split(',')
+              a.tag(href="/tags/"+tag)
+                i.icon-tags
+                |  #{tag}
+              | &nbsp;&nbsp;
+    .span3
+      - if (!excerpt.isNew && excerpt.image && excerpt.image.files && excerpt.image.files.length)
+        img(src=excerpt.image.cdnUri + '/mini_' + excerpt.image.files[0])
+
+  p
+    br
+    form.center.form-inline.confirm(action="/excerpts/"+excerpt.id, method="post")
+      input(type='hidden', name='_csrf', value="#{csrf_token}")
+      a.btn(href='/excerpts/'+excerpt._id+'/edit', title="edit") Edit
+      | &nbsp;&nbsp;
+      input(type="hidden", name="_method", value="DELETE")
+      button.btn.btn-danger(type="submit") delete
+
+  p
+    br
+    h3 Comments
+    - each comment in excerpt.comments
+      include ../comments/comment
+    include ../comments/form

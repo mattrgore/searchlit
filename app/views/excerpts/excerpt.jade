@@ -1,0 +1,27 @@
+excerpt.excerpt
+  h3
+    a(href='/excerpts/'+excerpt._id, title=excerpt.title) #{excerpt.title}
+  p= excerpt.body
+
+  .meta
+    span.muted= formatDate(excerpt.createdAt)
+
+    | &nbsp; - &nbsp;
+    span Author: &nbsp;
+    = excerpt.author
+
+    - if (excerpt.user)
+      | &nbsp; - &nbsp;
+      span Submitter &nbsp;
+
+      - var name = excerpt.user.name ? excerpt.user.name : excerpt.user.username
+
+      a(href="/users/"+excerpt.user._id)= name
+
+    - if (excerpt.tags)
+      | &nbsp; - &nbsp;
+      span Tags &nbsp;
+      - each tag in excerpt.tags.split(',')
+        i.muted.fa.fa-tag &nbsp;
+        a.tag(href="/tags/"+tag)= tag
+        | &nbsp;&nbsp;

@@ -1,0 +1,43 @@
+extends ../layouts/default
+
+block main
+  h1= excerpt.title
+
+block content
+  .row
+    .col-md-8
+      p=excerpt.body
+      - var author = excerpt.author
+      p Author :&nbsp; 
+        = author
+      .meta
+        - if (excerpt.user)
+          - var name = excerpt.user.name ? excerpt.user.name : excerpt.user.username
+          p Submitter :&nbsp;
+            a(href="/users/"+excerpt.user._id)= name
+
+        - if (excerpt.tags)
+          p Tags &nbsp;
+            - each tag in excerpt.tags.split(',')
+              i.muted.fa.fa-tag &nbsp;
+              a.tag(href="/tags/"+tag)= tag
+              | &nbsp;&nbsp;
+
+        p.muted= formatDate(excerpt.createdAt, "%b %d, %Y at %I:%M %p")
+
+    .col-md-4
+      - if (!excerpt.isNew && excerpt.image && excerpt.image.files && excerpt.image.files.length)
+        img(src=excerpt.image.cdnUri + '/mini_' + excerpt.image.files[0])
+
+  form(action="/excerpts/"+excerpt.id, method="post", onsubmit="return confirm('Are you sure?')")
+    input(type='hidden', name='_csrf', value="#{csrf_token}")
+    a.btn.btn-default(href='/excerpts/'+excerpt._id+'/edit', title="edit") Edit
+    | &nbsp;
+    input(type="hidden", name="_method", value="DELETE")
+    button.btn.btn-danger(type="submit") Delete
+
+  br
+  h3 Comments
+  - each comment in excerpt.comments
+    include ../comments/comment
+  include ../comments/form

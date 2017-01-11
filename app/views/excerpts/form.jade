@@ -1,0 +1,52 @@
+extends ../layouts/default
+
+block main
+  h1= title
+
+block content
+  - var action = '/excerpts'
+  - action += excerpt.isNew? '' : '/' + excerpt.id
+
+  .row
+    .col-md-8
+      form.form-horizontal(method="post", action=action, enctype="multipart/form-data", role="form")
+
+        input(type="hidden", name="_csrf", value="#{csrf_token}")
+
+        - if (!excerpt.isNew)
+          input(type="hidden", name="_method", value="PUT")
+
+        .form-group
+          label.col-sm-2.control-label(for='title') Title
+          .col-sm-10
+            input.form-control#title(type='text', name="title", value=excerpt.title, placeholder='Enter the title of the book')
+
+        .form-group
+          label.col-sm-2.control-label(for='author') Author
+          .col-sm-10
+            input.form-control#author(type='text', name="author", value=excerpt.author, placeholder='Enter the author of the excerpt')
+
+        .form-group
+          label.col-sm-2.control-label(for='file') Image
+          .col-sm-10
+            input.form-control#file(type='file', name="image")
+
+        .form-group
+          label.col-sm-2.control-label(for='desc') Body
+          .col-sm-10
+            textarea.form-control#desc(rows="5", name="body", placeholder='Enter the excerpt description')=excerpt.body
+
+        .form-group
+          label.col-sm-2.control-label(for='tags') Tags
+          .col-sm-10
+            input.form-control#tags(type='text', name="tags", value=excerpt.tags, placeholder='Enter the tags')
+
+        .form-group
+          .col-sm-offset-2.col-sm-10
+            button.btn.btn-primary(type='submit') Save
+            | &nbsp;
+            a.btn(href='/excerpts', title="cancel") Cancel
+
+    .col-md-4
+      - if (!excerpt.isNew && excerpt.image && excerpt.image.files && excerpt.image.files.length)
+        img(src=excerpt.image.cdnUri + "/mini_" + excerpt.image.files[0])
