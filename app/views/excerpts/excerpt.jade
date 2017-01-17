@@ -1,7 +1,7 @@
 excerpt.excerpt
   h3
     a(href='/excerpts/'+excerpt._id, title=excerpt.title) #{excerpt.title}
-  p= excerpt.body
+  p=excerpt.body.substring(0,500)+' ...'
 
   .meta
     span.muted= formatDate(excerpt.createdAt)

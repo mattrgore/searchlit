@@ -8,15 +8,6 @@ const Excerpt = mongoose.model('Excerpt');
 
 mongoose.connect('mongodb://localhost/searchlit_dev');
 
-// fs.readFile('training_data.json', 'utf-8', function(err, data){
-//     if (err){
-//         console.log(err);
-//     } else {
-//         var trainingData = JSON.parse(data);
-//         train(trainingData);
-//     }
-// });
-
 Excerpt.find(function (err, excerpts) {
         if (err) return console.error(err);
         train(excerpts);
@@ -36,16 +27,6 @@ function train(trainingData){
     loadTestData();
     console.log("I'm here");
 }
-
-// function loadDBTestData(){
-//     console.log("Loading test data from database");
-//     Excerpt.find(function (err, excerpts) {
-//         if (err) return console.error(err);
-//         excerpts.forEach(function(item){
-//             console.log(item.body);
-//         })
-//     })
-// }
 
 function loadTestData(){
     console.log("Loading test data");

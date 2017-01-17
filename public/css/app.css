@@ -96,6 +96,8 @@ button.error:focus {
   padding-right: 5px;
 }
 
+
+
 /**
  * Signup / login
  */
@@ -115,3 +117,4 @@ button.error:focus {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
+
