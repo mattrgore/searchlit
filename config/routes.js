@@ -38,7 +38,7 @@ module.exports = function (app, passport) {
       failureRedirect: '/login',
       failureFlash: 'Invalid email or password.'
     }), users.session);
-  app.get('/users/:userId', users.show);
+  app.get('/users/:userId', users.index);
   app.param('userId', users.load);
 
   // excerpt routes

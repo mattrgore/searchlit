@@ -8,6 +8,33 @@ const mongoose = require('mongoose');
 const { wrap: async } = require('co');
 const { respond } = require('../utils');
 const User = mongoose.model('User');
+const Excerpt = mongoose.model('Excerpt');
+
+
+/**
+ * Index
+ */
+
+exports.index = async(function* (req, res) {
+  const criteria = { users: req.params.user };
+  const page = (req.params.page > 0 ? req.params.page : 1) - 1;
+  const limit = 30;
+  const options = {
+    limit: limit,
+    page: page,
+    criteria: criteria
+  };
+
+  const excerpts = yield Excerpt.list(options);
+  const count = yield Excerpt.count(criteria);
+  const profile = yield User.load({ criteria });
+  respond(res, 'excerpts/index', {
+    title: 'Excerpts by ' + profile.name,
+    excerpts: excerpts,
+    page: page + 1,
+    pages: Math.ceil(count / limit)
+  });
+});
 
 /**
  * Load
